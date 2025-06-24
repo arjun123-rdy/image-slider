@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Image Slider</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #111;
+      color: #fff;
+      margin: 0;
+      padding: 0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+    }
+
+    .slider {
+      position: relative;
+      width: 80%;
+      max-width: 800px;
+      overflow: hidden;
+      border-radius: 10px;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.5);
+    }
+
+    .slides {
+      display: flex;
+      transition: transform 0.5s ease-in-out;
+      width: 100%;
+    }
+
+    .slides img {
+      width: 100%;
+      height: 500px;
+      object-fit: cover;
+      flex-shrink: 0;
+    }
+
+    .navigation {
+      position: absolute;
+      width: 100%;
+      top: 50%;
+      transform: translateY(-50%);
+      display: flex;
+      justify-content: space-between;
+      padding: 0 20px;
+      box-sizing: border-box;
+    }
+
+    .nav-btn {
+      background-color: rgba(0, 0, 0, 0.6);
+      color: white;
+      border: none;
+      padding: 10px 20px;
+      cursor: pointer;
+      font-size: 18px;
+      border-radius: 5px;
+    }
+
+    .nav-btn:hover {
+      background-color: rgba(255, 255, 255, 0.2);
+    }
+
+    @media (max-width: 600px) {
+      .slides img {
+        height: 300px;
+      }
+
+      .nav-btn {
+        padding: 8px 15px;
+        font-size: 16px;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="slider" id="slider">
+    <div class="slides" id="slides">
+      <img src="https://picsum.photos/id/1015/800/500" alt="Image 1">
+      <img src="https://picsum.photos/id/1016/800/500" alt="Image 2">
+      <img src="https://picsum.photos/id/1018/800/500" alt="Image 3">
+    </div>
+    <div class="navigation">
+      <button class="nav-btn" id="prev">Previous</button>
+      <button class="nav-btn" id="next">Next</button>
+    </div>
+  </div>
+
+  <script>
+    const slides = document.getElementById('slides');
+    const totalSlides = slides.children.length;
+    let currentIndex = 0;
+
+    function showSlide(index) {
+      if (index < 0) index = totalSlides - 1;
+      if (index >= totalSlides) index = 0;
+      slides.style.transform = `translateX(-${index * 100}%)`;
+      currentIndex = index;
+    }
+
+    document.getElementById('prev').addEventListener('click', () => {
+      showSlide(currentIndex - 1);
+    });
+
+    document.getElementById('next').addEventListener('click', () => {
+      showSlide(currentIndex + 1);
+    });
+
+    // Auto Slide
+    let autoSlide = setInterval(() => {
+      showSlide(currentIndex + 1);
+    }, 4000);
+
+    // Pause on hover
+    document.getElementById('slider').addEventListener('mouseover', () => {
+      clearInterval(autoSlide);
+    });
+
+    document.getElementById('slider').addEventListener('mouseout', () => {
+      autoSlide = setInterval(() => {
+        showSlide(currentIndex + 1);
+      }, 4000);
+    });
+
+    showSlide(0); // Initial slide
+  </script>
+
+</body>
+</html>
